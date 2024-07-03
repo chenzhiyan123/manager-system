@@ -1,12 +1,16 @@
 package com.mana.sys.bean;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author: chenzhiyan
  * @createDate: 2024/06/30
  * @description: account message for request
  */
+@Getter
+@Setter
 public class Account {
     @JsonProperty("userId")
     private long userId;
@@ -16,28 +20,4 @@ public class Account {
 
     @JsonProperty("role")
     private String role;
-
-    public long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(long userId) {
-        this.userId = userId;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
 }
