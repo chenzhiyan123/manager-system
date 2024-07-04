@@ -1,4 +1,4 @@
-package com.mana.sys;
+package com.mana.sys.component;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
