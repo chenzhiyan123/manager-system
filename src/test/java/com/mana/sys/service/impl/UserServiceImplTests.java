@@ -1,6 +1,7 @@
 package com.mana.sys.service.impl;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mana.sys.bean.UserEndpoint;
 import com.mana.sys.constants.SysConstants;
@@ -29,28 +30,34 @@ public class UserServiceImplTests {
     private UserService userService;
 
     @Test
-    public void testAddAccess() throws IOException {
+    public void testAddAccess() {
         List<UserEndpoint> userEndpoints = new ArrayList<>();
         Assertions.assertThrows(RuntimeException.class, () -> {
             userService.addAccess(userEndpoints);
         });
-        String userEndpointJson = "{\"userId\":123456,\"endpoint\" :[\"resource C\",\"resource D\"]}";
+        long userId = 123456l;
+        String userEndpointJson = "{\"userId\":" + userId + ",\"endpoint\" :[\"resource C\",\"resource D\"]}";
         ObjectMapper mapperAccount = new ObjectMapper();
-        UserEndpoint userEndpoint = mapperAccount.readValue(userEndpointJson, UserEndpoint.class);
-        userEndpoints.add(userEndpoint);
+        Assertions.assertDoesNotThrow(() -> {
+            UserEndpoint userEndpoint = mapperAccount.readValue(userEndpointJson, UserEndpoint.class);
+            userEndpoints.add(userEndpoint);
+        });
         Assertions.assertDoesNotThrow(() -> {
             userService.addAccess(userEndpoints);
         });
         String pathStr = SysConstants.RESOURCE_DIR + File.separator
-                + userEndpoint.getUserId() + SysConstants.FILE_SUFFIX;
+                + userId + SysConstants.FILE_SUFFIX;
         Assertions.assertTrue(Files.exists(Paths.get(pathStr)));
-
-     }
+    }
 
     @Test
-    public void testCheckAccess() throws IOException {
+    public void testCheckAccess() {
         long userId = 123456l;
-        Assertions.assertFalse(userService.checkAccess(userId, Strings.EMPTY));
-        Assertions.assertFalse(userService.checkAccess(userId, File.separator));
+        Assertions.assertDoesNotThrow(() -> {
+            Assertions.assertFalse(userService.checkAccess(userId, Strings.EMPTY));
+        });
+        Assertions.assertDoesNotThrow(() -> {
+            Assertions.assertFalse(userService.checkAccess(userId, File.separator));
+        });
     }
 }
