@@ -17,7 +17,7 @@ public class ApplicationRunnerImplTests {
     private ApplicationRunner applicationRunner;
 
     @Test
-    public void testRun() throws Exception {
+    public void testRun() {
         Assertions.assertDoesNotThrow(() -> {
             applicationRunner.run(null);
         });

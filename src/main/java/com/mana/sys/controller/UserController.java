@@ -49,8 +49,6 @@ public class UserController {
                 userService.addAccess(userEndpoints.getEndpoints());
             } catch (IOException ex3) {
                 return CustomResponse.createRespone(HttpStatus.INTERNAL_SERVER_ERROR, "data write error!");
-            } catch (NullPointerException ex4) {
-                return CustomResponse.createRespone(HttpStatus.INTERNAL_SERVER_ERROR, "data write npt error!");
             }
             return CustomResponse.createRespone(HttpStatus.OK, SysConstants.SUCCESS);
         }

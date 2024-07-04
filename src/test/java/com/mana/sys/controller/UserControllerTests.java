@@ -48,10 +48,17 @@ public class UserControllerTests {
     }
 
     @Test
-    public void testAddUserTooLongId() throws Exception {
+    public void testAddUserIllegalUserId() throws Exception {
         String base64AccountInfo = getAccountBase64(123456l, RoleConstants.ADMIN);
         String endpointsJson = "{\"endpoints\":" +
                 "[{\"userId\":12345711111111111111111111,\"endpoint\": [\"resource A\"]}]}";
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUser")
+                        .header(SysConstants.HEADER_ACCOUNT, base64AccountInfo)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(endpointsJson))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError());
+        endpointsJson = "{\"endpoints\":" +
+                "[{\"userId\":000001,\"endpoint\": [\"resource A\"]}]}";
         mockMvc.perform(MockMvcRequestBuilders.post("/admin/addUser")
                         .header(SysConstants.HEADER_ACCOUNT, base64AccountInfo)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -82,7 +89,7 @@ public class UserControllerTests {
     }
 
     @Test
-    public void testGetAccess() throws Exception {
+    public void testGetAccessBlank() throws Exception {
         String base64AccountInfo = getAccountBase64(123456l, RoleConstants.ADMIN);
         mockMvc.perform(MockMvcRequestBuilders.get("/user/ resource D")
                         .header(SysConstants.HEADER_ACCOUNT, base64AccountInfo))
@@ -101,7 +108,8 @@ public class UserControllerTests {
                         CustomResponse.createStringRespone(HttpStatus.FORBIDDEN, SysConstants.ILLEGAL)));
         // andExpect of response status is dependent on the version of spring-boot
         mockMvc.perform(MockMvcRequestBuilders.get("/user/")
-                        .header(SysConstants.HEADER_ACCOUNT, base64AccountInfo));
+                        .header(SysConstants.HEADER_ACCOUNT, base64AccountInfo))
+                .andExpect(MockMvcResultMatchers.status().is5xxServerError());
     }
 
     private String getAccountBase64(long userId, String role) {
